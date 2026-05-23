@@ -30,6 +30,8 @@ public class PlayerHealth : MonoBehaviour
         {
             dead = true;
             OnDeath?.Invoke();
+            if (GameManager.Instance != null)
+                GameManager.Instance.TriggerLose();
         }
     }
 }

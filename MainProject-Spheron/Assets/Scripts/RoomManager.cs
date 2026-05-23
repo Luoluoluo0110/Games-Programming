@@ -75,7 +75,7 @@ public class RoomManager : MonoBehaviour
         if (exitDoor != null) exitDoor.SetActive(false);
         onCleared?.Invoke();
 
-        if (isBossRoom && HUDController.Instance != null)
-            HUDController.Instance.ShowVictory();
+        if (isBossRoom && GameManager.Instance != null)
+            GameManager.Instance.TriggerWin();
     }
 }
