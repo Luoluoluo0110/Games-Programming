@@ -38,6 +38,9 @@ public class RoomManager : MonoBehaviour
         if (activated) return;
         activated = true;
 
+        if (HUDController.Instance != null)
+            HUDController.Instance.SetRoom(roomNumber);
+
         if (enemyPrefab == null || spawnPoints.Count == 0)
         {
             Clear();
@@ -71,5 +74,8 @@ public class RoomManager : MonoBehaviour
         cleared = true;
         if (exitDoor != null) exitDoor.SetActive(false);
         onCleared?.Invoke();
+
+        if (isBossRoom && HUDController.Instance != null)
+            HUDController.Instance.ShowVictory();
     }
 }
