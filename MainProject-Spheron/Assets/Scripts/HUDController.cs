@@ -30,7 +30,6 @@ public class HUDController : MonoBehaviour
         if (playerHealth != null)
         {
             playerHealth.OnHealthChanged += UpdateHealth;
-            playerHealth.OnDeath += ShowDefeat;
             UpdateHealth(playerHealth.CurrentHP, playerHealth.maxHP);
         }
     }
@@ -38,10 +37,7 @@ public class HUDController : MonoBehaviour
     void OnDestroy()
     {
         if (playerHealth != null)
-        {
             playerHealth.OnHealthChanged -= UpdateHealth;
-            playerHealth.OnDeath -= ShowDefeat;
-        }
     }
 
     public void UpdateHealth(int current, int max)
