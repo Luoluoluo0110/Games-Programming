@@ -162,7 +162,8 @@ PlayerSettings:
   resetResolutionOnWindowResize: 0
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
-  applicationIdentifier: {}
+  applicationIdentifier:
+    Standalone: com.DefaultCompany.MainProject-Spheron
   buildNumber:
     Standalone: 0
     VisionOS: 0
@@ -683,7 +684,7 @@ PlayerSettings:
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
   metroPackageName: MainProject-Spheron
-  metroPackageVersion: 
+  metroPackageVersion: 1.0.0.0
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
@@ -691,7 +692,7 @@ PlayerSettings:
   metroCertificateNotAfter: 0000000000000000
   metroApplicationDescription: MainProject-Spheron
   wsaImages: {}
-  metroTileShortName: 
+  metroTileShortName: MainProject-Spheron
   metroTileShowName: 0
   metroMediumTileShowName: 0
   metroLargeTileShowName: 0
