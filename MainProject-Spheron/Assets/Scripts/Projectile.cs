@@ -23,6 +23,10 @@ public class Projectile : MonoBehaviour
     void OnCollisionEnter(Collision col)
     {
         if (col.collider.CompareTag("Player")) return;
+
+        EnemyCube target = col.collider.GetComponentInParent<EnemyCube>();
+        if (target != null) target.TakeDamage(damage);
+
         Destroy(gameObject);
     }
 }
