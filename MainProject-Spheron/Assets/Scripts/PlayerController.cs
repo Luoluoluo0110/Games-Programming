@@ -12,6 +12,12 @@ public class PlayerController : MonoBehaviour
     public float mouseSensitivity = 2f;
     public float maxPitch = 85f;
 
+    [Header("Bounds")]
+    public float minX = -4f;
+    public float maxX = 4f;
+    public float minZ = -10f;
+    public float maxZ = 55f;
+
     private CharacterController controller;
     private float verticalVelocity;
     private float pitch;
@@ -56,5 +62,10 @@ public class PlayerController : MonoBehaviour
         move.y = verticalVelocity;
 
         controller.Move(move * Time.deltaTime);
+
+        Vector3 p = transform.position;
+        p.x = Mathf.Clamp(p.x, minX, maxX);
+        p.z = Mathf.Clamp(p.z, minZ, maxZ);
+        transform.position = p;
     }
 }

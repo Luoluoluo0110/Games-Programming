@@ -12,6 +12,7 @@ public class Projectile : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.useGravity = false;
+        rb.mass = 0.01f;
         Destroy(gameObject, lifetime);
     }
 
