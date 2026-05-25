@@ -26,6 +26,9 @@ public class EnemyCube : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+        rb.mass = 100f;
+        rb.useGravity = false;
+        rb.constraints |= RigidbodyConstraints.FreezePositionY;
         CurrentHP = maxHP;
     }
 
