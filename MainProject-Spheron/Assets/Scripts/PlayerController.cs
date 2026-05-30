@@ -31,6 +31,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // stop responding once the round ends; mouse-look ignores timeScale, so without
+        // this the camera keeps spinning on the win/lose screen
+        if (GameManager.Instance != null && GameManager.Instance.CurrentState != GameManager.State.Playing)
+            return;
+
         HandleLook();
         HandleMove();
     }
@@ -40,8 +45,9 @@ public class PlayerController : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
-        transform.Rotate(0f, mouseX, 0f);
+        transform.Rotate(0f, mouseX, 0f);   // yaw turns the whole body
 
+        // pitch only tilts the camera, kept within range so you can't flip over
         pitch -= mouseY;
         pitch = Mathf.Clamp(pitch, -maxPitch, maxPitch);
         if (cameraTransform != null)
@@ -56,6 +62,7 @@ public class PlayerController : MonoBehaviour
         Vector3 move = transform.right * x + transform.forward * z;
         move *= moveSpeed;
 
+        // small downward push when grounded keeps the controller settled on the floor
         if (controller.isGrounded && verticalVelocity < 0f)
             verticalVelocity = -1f;
         verticalVelocity += gravity * Time.deltaTime;
@@ -63,6 +70,7 @@ public class PlayerController : MonoBehaviour
 
         controller.Move(move * Time.deltaTime);
 
+        // hard-clamp to the level bounds so the player can't walk out of the corridor
         Vector3 p = transform.position;
         p.x = Mathf.Clamp(p.x, minX, maxX);
         p.z = Mathf.Clamp(p.z, minZ, maxZ);

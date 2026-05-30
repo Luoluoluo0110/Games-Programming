@@ -14,6 +14,10 @@ public class EnemyCube : MonoBehaviour
     public int contactDamage = 10;
     public float attackCooldown = 1f;
 
+    [Header("Visuals (optional)")]
+    public Animator animator;
+    public float deathDestroyDelay = 2f;
+
     public int CurrentHP { get; private set; }
     public event Action OnDeath;
 
@@ -25,11 +29,12 @@ public class EnemyCube : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
+        rb.freezeRotation = true;                              // we drive rotation ourselves
         rb.mass = 100f;
         rb.useGravity = false;
-        rb.constraints |= RigidbodyConstraints.FreezePositionY;
+        rb.constraints |= RigidbodyConstraints.FreezePositionY; // pin to the floor plane
         CurrentHP = maxHP;
+        if (animator == null) animator = GetComponentInChildren<Animator>();
     }
 
     void Start()
@@ -42,6 +47,11 @@ public class EnemyCube : MonoBehaviour
     {
         if (dead || player == null) return;
 
+        // cancel knockback from hits; this body has no drag, so impulses would otherwise
+        // pile up and shove the enemy off course (drifting away or pushing through walls)
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
         Vector3 dir = player.position - transform.position;
         dir.y = 0f;
         if (dir.sqrMagnitude < 0.0001f) return;
@@ -49,8 +59,11 @@ public class EnemyCube : MonoBehaviour
 
         rb.MovePosition(rb.position + dir * moveSpeed * Time.fixedDeltaTime);
         rb.MoveRotation(Quaternion.LookRotation(dir, Vector3.up));
+
+        if (animator != null) animator.SetFloat("Speed", moveSpeed);
     }
 
+    // deal contact damage while touching the player, throttled by attackCooldown
     void OnCollisionStay(Collision col)
     {
         if (dead || Time.time < nextAttackTime) return;
@@ -61,6 +74,7 @@ public class EnemyCube : MonoBehaviour
         {
             ph.TakeDamage(contactDamage);
             nextAttackTime = Time.time + attackCooldown;
+            if (animator != null) animator.SetTrigger("Attack");
         }
     }
 
@@ -72,7 +86,15 @@ public class EnemyCube : MonoBehaviour
         {
             dead = true;
             OnDeath?.Invoke();
-            Destroy(gameObject);
+            if (animator != null)
+            {
+                animator.SetTrigger("Die");
+                Destroy(gameObject, deathDestroyDelay);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

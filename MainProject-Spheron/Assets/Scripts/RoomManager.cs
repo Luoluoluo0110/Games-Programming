@@ -33,6 +33,7 @@ public class RoomManager : MonoBehaviour
         if (other.CompareTag("Player")) Activate();
     }
 
+    // fired the first time the player enters: lock the room in and spawn its wave
     public void Activate()
     {
         if (activated) return;
@@ -55,11 +56,11 @@ public class RoomManager : MonoBehaviour
             if (ec != null)
             {
                 alive.Add(ec);
-                ec.OnDeath += () => OnEnemyDied(ec);
+                ec.OnDeath += () => OnEnemyDied(ec);   // tick this enemy off when it dies
             }
         }
 
-        if (alive.Count == 0) Clear();
+        if (alive.Count == 0) Clear();   // nothing actually spawned, so open straight away
     }
 
     void OnEnemyDied(EnemyCube ec)
@@ -68,11 +69,12 @@ public class RoomManager : MonoBehaviour
         if (alive.Count == 0) Clear();
     }
 
+    // room beaten: open the exit and, if this is the final room, win the game
     void Clear()
     {
         if (cleared) return;
         cleared = true;
-        if (exitDoor != null) exitDoor.SetActive(false);
+        if (exitDoor != null) exitDoor.SetActive(false);   // disabling the door = open
         onCleared?.Invoke();
 
         if (isBossRoom && GameManager.Instance != null)

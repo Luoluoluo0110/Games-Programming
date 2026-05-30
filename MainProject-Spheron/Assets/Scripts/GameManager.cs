@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        // R reloads the level, but only after you've won or lost
         if (CurrentState != State.Playing && Input.GetKeyDown(KeyCode.R))
             Restart();
     }
@@ -42,7 +43,7 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
-        Time.timeScale = 1f;
+        Time.timeScale = 1f;   // undo the pause before reloading
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

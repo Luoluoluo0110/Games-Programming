@@ -18,13 +18,14 @@ public class PlayerHealth : MonoBehaviour
 
     void Start()
     {
+        // push the starting value so the HUD draws a full bar on spawn
         OnHealthChanged?.Invoke(CurrentHP, maxHP);
     }
 
     public void TakeDamage(int amount)
     {
         if (dead || amount <= 0) return;
-        CurrentHP = Mathf.Max(0, CurrentHP - amount);
+        CurrentHP = Mathf.Max(0, CurrentHP - amount);   // never go below zero
         OnHealthChanged?.Invoke(CurrentHP, maxHP);
         if (CurrentHP == 0)
         {
