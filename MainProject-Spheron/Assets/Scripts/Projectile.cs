@@ -11,9 +11,9 @@ public class Projectile : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        rb.useGravity = false;
-        rb.mass = 0.01f;
-        Destroy(gameObject, lifetime);
+        rb.useGravity = false;          // flies straight, no drop
+        rb.mass = 0.01f;                // light enough not to shove enemies around
+        Destroy(gameObject, lifetime);  // clean up shots that never hit anything
     }
 
     public void Launch(Vector3 velocity)
@@ -23,11 +23,12 @@ public class Projectile : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        if (col.collider.CompareTag("Player")) return;
+        if (col.collider.CompareTag("Player")) return;   // never hurt the shooter
 
+        // search parents too, in case the visible mesh collider sits on a child of the enemy
         EnemyCube target = col.collider.GetComponentInParent<EnemyCube>();
         if (target != null) target.TakeDamage(damage);
 
-        Destroy(gameObject);
+        Destroy(gameObject);   // one-shot: gone on first impact with anything but the player
     }
 }
